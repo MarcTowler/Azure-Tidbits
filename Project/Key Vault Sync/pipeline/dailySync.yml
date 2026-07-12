@@ -1,0 +1,22 @@
+trigger: none
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily Sync
+  branches:
+    include:
+    - main
+  always: true
+
+  variables:
+    ServiceConnection: 'Azure Key Vault Sync'
+
+  steps:
+  - task: AzurePowerShell@5
+    displayName: 'Run Key Vault Sync'
+    inputs:
+      azureSubscription: $(ServiceConnection)
+      ScriptType: 'FilePath'
+      ScriptPath: '$(Build.SourcesDirectory)/scripts/KeyVaultSync.ps1'
+      azurePowerShellVersion: 'LatestVersion'
+      pwsh: true
